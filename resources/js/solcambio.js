@@ -50,9 +50,9 @@ async function loadRate() {
     try {
         const response = await fetch('/api/exchange-rate', { headers: { Accept: 'application/json' } });
         const data = await response.json();
-        el.rateBadge.textContent = `1 ${data.to} = ${formatClp(data.exchange_rate)} ${data.from}`;
+        el.rateBanner.textContent = `Cambio de hoy 1 ${data.to} = ${data.exchange_rate} ${data.from}`;
     } catch (error) {
-        el.rateBadge.textContent = 'Tasa no disponible';
+        el.rateBanner.textContent = 'Cambio de hoy no disponible';
     }
 }
 
@@ -64,6 +64,7 @@ function toggleDirection() {
     state.direction = state.direction === 'clpToUsd' ? 'usdToClp' : 'clpToUsd';
     renderDirection();
     el.amount.value = '';
+    setButton('idle');
     el.amount.focus();
 }
 
@@ -81,10 +82,11 @@ function renderDirection() {
             const chip = document.createElement('button');
             chip.type = 'button';
             chip.className =
-                'rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 dark:border-slate-700 dark:text-slate-300 dark:hover:border-blue-800 dark:hover:bg-blue-950 dark:hover:text-blue-300';
+                'rounded-full border border-slate-200 px-3 py-1 text-sm text-slate-600 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-violet-900 dark:text-violet-200 dark:hover:border-violet-600 dark:hover:bg-violet-950';
             chip.textContent = formatChip(value);
             chip.addEventListener('click', () => {
                 el.amount.value = String(value);
+                setButton('idle');
                 el.amount.focus();
             });
             return chip;
@@ -117,7 +119,7 @@ async function convert(event) {
 
     const directionKey = state.direction;
     const direction = DIRECTIONS[directionKey];
-    setLoading(true);
+    setButton('loading');
 
     try {
         const response = await fetch(direction.endpoint, {
@@ -135,21 +137,30 @@ async function convert(event) {
 
         if (data.success) {
             saveToHistory(data, directionKey);
-            showToast('Conversión lista', 'success');
+            setButton('success');
         } else {
-            showToast(data.message, 'error');
+            setButton('idle');
+            showToast(data.message);
         }
     } catch (error) {
         renderJson('—', { error: 'No se pudo conectar con el servidor.' });
-        showToast('No se pudo conectar con el servidor.', 'error');
-    } finally {
-        setLoading(false);
+        setButton('idle');
+        showToast('No se pudo conectar con el servidor.');
     }
 }
 
-function setLoading(isLoading) {
-    el.convertButton.disabled = isLoading;
-    el.convertButton.textContent = isLoading ? 'Convirtiendo…' : 'Convertir';
+const BUTTON_TEXT = {
+    idle: 'Convertir',
+    loading: 'Convirtiendo…',
+    success: 'CONVERSIÓN REALIZADA CON ÉXITO',
+};
+
+/**
+ * Estados del botón: idle (listo), loading (esperando a la API) y success.
+ */
+function setButton(status) {
+    el.convertButton.disabled = status === 'loading';
+    el.convertButton.textContent = BUTTON_TEXT[status];
 }
 
 /**
@@ -179,19 +190,12 @@ function renderJson(status, data) {
 }
 
 // ---------------------------------------------------------------------------
-// Notificación flotante
+// Notificación de error
 // ---------------------------------------------------------------------------
 
-const TOAST_STYLES = {
-    success: 'border-green-200 bg-green-50 text-green-800 dark:border-green-900 dark:bg-green-950 dark:text-green-200',
-    error: 'border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-200',
-};
-
-function showToast(message, type) {
+function showToast(message) {
     clearTimeout(state.toastTimer);
 
-    el.toast.classList.remove(...TOAST_STYLES.success.split(' '), ...TOAST_STYLES.error.split(' '));
-    el.toast.classList.add(...TOAST_STYLES[type].split(' '));
     el.toastMessage.textContent = message;
     el.toast.classList.remove('opacity-0', 'translate-y-[-1rem]');
 
@@ -283,7 +287,7 @@ function init() {
     Object.assign(el, {
         toast: document.getElementById('toast'),
         toastMessage: document.getElementById('toast-message'),
-        rateBadge: document.getElementById('rate-badge'),
+        rateBanner: document.getElementById('rate-banner'),
         directionLabel: document.getElementById('direction-label'),
         amount: document.getElementById('amount'),
         amountPrefix: document.getElementById('amount-prefix'),
@@ -298,6 +302,7 @@ function init() {
     });
 
     document.getElementById('convert-form').addEventListener('submit', convert);
+    el.amount.addEventListener('input', () => setButton('idle'));
     document.getElementById('swap-button').addEventListener('click', toggleDirection);
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
     document.getElementById('clear-history').addEventListener('click', clearHistory);
