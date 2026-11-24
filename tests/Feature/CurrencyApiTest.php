@@ -130,6 +130,20 @@ class CurrencyApiTest extends TestCase
         $this->get('/api/convert')
             ->assertMethodNotAllowed()
             ->assertHeader('Content-Type', 'application/json')
-            ->assertJsonStructure(['message']);
+            ->assertExactJson([
+                'success' => false,
+                'message' => 'Método HTTP no permitido para esta ruta.',
+            ]);
+    }
+
+    public function test_unknown_route_returns_json_404(): void
+    {
+        $this->get('/api/no-existe')
+            ->assertNotFound()
+            ->assertHeader('Content-Type', 'application/json')
+            ->assertExactJson([
+                'success' => false,
+                'message' => 'La ruta solicitada no existe.',
+            ]);
     }
 }

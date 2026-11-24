@@ -1,0 +1,1046 @@
+{
+    "info": {
+        "name": "Solcambio - API CLP ↔ USD",
+        "description": "Casos de prueba de la Tarea 4. Levanta la API con `php artisan serve` y ejecuta la colección completa con el Runner.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://127.0.0.1:8000"
+        }
+    ],
+    "item": [
+        {
+            "name": "CLP → USD (POST /api/convert)",
+            "item": [
+                {
+                    "name": "GET tasa de cambio",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.from).to.eql(\"CLP\");",
+                                    "    pm.expect(json.to).to.eql(\"USD\");",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/exchange-rate",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "exchange-rate"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "19000 CLP → 20 USD (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_clp).to.eql(19000);",
+                                    "    pm.expect(json.amount_usd).to.eql(20);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":19000}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1000 CLP → 1.05 USD (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_clp).to.eql(1000);",
+                                    "    pm.expect(json.amount_usd).to.eql(1.05);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":1000}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "950 CLP → 1 USD (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_clp).to.eql(950);",
+                                    "    pm.expect(json.amount_usd).to.eql(1);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":950}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser mayor a cero.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 0}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "-5000 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser mayor a cero.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": -5000}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "\"hola\" (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser numérico.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": \"hola\"}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1500.50 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser un número entero de pesos chilenos.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 1500.50}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "100000001 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto no puede superar los $100.000.000 CLP.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 100000001}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Campo ausente (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El campo amount es obligatorio.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "GET /api/convert → 405 en JSON",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 405\", () => pm.response.to.have.status(405));",
+                                    "pm.test(\"Respuesta en JSON\", () => pm.response.to.be.json);"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "USD → CLP (POST /api/convert/usd-to-clp)",
+            "item": [
+                {
+                    "name": "20 USD → 19000 CLP (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_usd).to.eql(20);",
+                                    "    pm.expect(json.amount_clp).to.eql(19000);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":20}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1 USD → 950 CLP (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_usd).to.eql(1);",
+                                    "    pm.expect(json.amount_clp).to.eql(950);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":1}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1.05 USD → 998 CLP (200)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 200\", () => pm.response.to.have.status(200));",
+                                    "pm.test(\"Respuesta JSON esperada\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(true);",
+                                    "    pm.expect(json.amount_usd).to.eql(1.05);",
+                                    "    pm.expect(json.amount_clp).to.eql(998);",
+                                    "    pm.expect(json.exchange_rate).to.eql(950);",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\":1.05}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "0 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser mayor a cero.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 0}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "-5 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser mayor a cero.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": -5}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "\"hola\" (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto debe ser numérico.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": \"hola\"}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "1.234 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto en dólares admite como máximo dos decimales.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 1.234}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "105263.16 (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El monto no puede superar los US$ 105.263,15 (equivalente a $100.000.000 CLP).\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\"amount\": 105263.16}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                },
+                {
+                    "name": "Campo ausente (422)",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(\"HTTP 422\", () => pm.response.to.have.status(422));",
+                                    "pm.test(\"Mensaje de error\", () => {",
+                                    "    const json = pm.response.json();",
+                                    "    pm.expect(json.success).to.eql(false);",
+                                    "    pm.expect(json.message).to.eql(\"El campo amount es obligatorio.\");",
+                                    "});"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/api/convert/usd-to-clp",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "api",
+                                "convert",
+                                "usd-to-clp"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

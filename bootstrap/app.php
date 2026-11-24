@@ -5,6 +5,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -29,6 +31,21 @@ return Application::configure(basePath: dirname(__DIR__))
                     'success' => false,
                     'message' => $e->validator->errors()->first(),
                 ], $e->status);
+            }
+        });
+
+        // Errores HTTP (404, 405...): mismo formato {"success": false, "message": "..."}.
+        $exceptions->render(function (HttpExceptionInterface $e, Request $request) {
+            if ($request->is('api/*')) {
+                $messages = [
+                    404 => 'La ruta solicitada no existe.',
+                    405 => 'Método HTTP no permitido para esta ruta.',
+                ];
+
+                return response()->json([
+                    'success' => false,
+                    'message' => $messages[$e->getStatusCode()] ?? Response::$statusTexts[$e->getStatusCode()],
+                ], $e->getStatusCode(), $e->getHeaders());
             }
         });
     })->create();
