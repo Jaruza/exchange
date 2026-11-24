@@ -179,4 +179,8 @@ curl -X POST http://127.0.0.1:8000/api/convert/usd-to-clp -H "Content-Type: appl
 - Panel con la respuesta JSON cruda.
 - La interfaz no valida: todo lo valida la API.
 
+## Nota
+
+- Trabajo realizado utilizando la inteligencia artificial Claude de Anthropic como guía, exigiendo que explicará cómo profesor cómo funcionaba cada bloque de código, por qué razón se decidía utilizar ese bloque de código y cómo se conectan entre sí..
+
 - Jomni Ruiz
